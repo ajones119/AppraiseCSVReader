@@ -57,13 +57,13 @@ export const FileUploader = ({ setCSVData }) => {
                 }) => (
                     <>
                     <div style={styles.csvReader}>
-                        <Button type='button' {...getRootProps()}>
+                        <Button type='button' {...getRootProps()} variant="success">
                         Browse file
                         </Button>
                         <div style={styles.acceptedFile}>
                         {acceptedFile && acceptedFile.name}
                         </div>
-                        <Button {...getRemoveFileProps()}>
+                        <Button {...getRemoveFileProps()} variant="danger">
                         Remove
                         </Button>
                     </div>

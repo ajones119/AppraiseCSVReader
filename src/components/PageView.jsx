@@ -23,14 +23,15 @@ export const PageView = () => {
                 <FileUploader setCSVData={setCSVData} />
             </Row>
             <Row>
-                <FileDownloader fileData={csvData} />
-                <DatePicker onChange={(date) => setStartDate(date)} value={startDate} />
+                <DatePicker onChange={(date) => setStartDate(date)} value={startDate}/>
             </Row>
             <Row>
                 <DataDisplay fileData={csvData} startDate={startDate} />
-                <h1>{startDate ? startDate.toString() : ""}</h1>
-                <p style={color}>{JSON.stringify(csvData)}</p>
             </Row>
         </Container>
     );
 }
+
+//<FileDownloader fileData={csvData} />
+//<h1>{startDate ? startDate.toString() : ""}</h1>
+//<p style={color}>{JSON.stringify(csvData)}</p>
