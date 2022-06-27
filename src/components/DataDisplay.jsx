@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Table } from 'react-bootstrap';
-import { calculateAverage, calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateMedian, getAverage, getMedian, getPercentageChange } from '../Utils/calculations';
+import { calculateAverage, calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateAverageSquareFeet, calculateMedian, getAverage, getMedian, getPercentageChange } from '../Utils/calculations';
 import { FOUR_TO_SIX_MONTHS, NINETEEN_TO_TWENTY_ONE_MONTHS, SEVEN_TO_NINE_MONTHS, SIXTEEN_TO_EIGHTEEN_MONTHS, TEN_TO_TWELVE_MONTHS, THIRTEEN_TO_FIFTEEN_MONTHS, THIRTEEN_TO_TWENTY_FOUR_MONTHS, TWENTY_TWO_TO_TWENTY_FOUR_MONTHS, ZERO_TO_THREE_MONTHS, ZERO_TO_TWELVE_MONTHS, ZERO_TO_TWENTY_FOUR_MONTHS } from '../Utils/constants';
 
 const titleStyle = {
@@ -47,10 +47,28 @@ export const DataDisplay = ({ fileData, startDate }) => {
                     <td>-</td>
                 </tr>
                 <tr>
+                    <td>Average Square Foot</td>
+                    <td>{startDate ? getAverage(fileData, startDate, ZERO_TO_TWELVE_MONTHS, calculateAverageSquareFeet) : ""}</td>
+                    <td>{startDate ? getAverage(fileData, startDate, THIRTEEN_TO_TWENTY_FOUR_MONTHS, calculateAverageSquareFeet) : ""}</td>
+                    <td>{startDate ? getAverage(fileData, startDate, ZERO_TO_TWENTY_FOUR_MONTHS, calculateAverageSquareFeet) : ""}</td>
+                </tr>
+                <tr>
+                    <td>Percent Change</td>
+                    <td>{startDate ? getPercentageChange(ZERO_TO_TWELVE_MONTHS, THIRTEEN_TO_TWENTY_FOUR_MONTHS, startDate, fileData, calculateAveragePricePerSquareFoot) : ""}</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
                     <td>Median</td>
                     <td>{startDate ? getMedian(fileData, startDate, ZERO_TO_TWELVE_MONTHS, calculateMedian) : ""}</td>
                     <td>{startDate ? getMedian(fileData, startDate, THIRTEEN_TO_TWENTY_FOUR_MONTHS, calculateMedian) : ""}</td>
                     <td>{startDate ? getMedian(fileData, startDate, ZERO_TO_TWENTY_FOUR_MONTHS, calculateMedian) : ""}</td>
+                </tr>
+                <tr>
+                    <td>Median Square Feet</td>
+                    <td>{startDate ? getMedian(fileData, startDate, ZERO_TO_TWELVE_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, THIRTEEN_TO_TWENTY_FOUR_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, ZERO_TO_TWENTY_FOUR_MONTHS, calculateMedian, false) : ""}</td>
                 </tr>
             </tbody>
         </Table>
@@ -126,6 +144,17 @@ export const DataDisplay = ({ fileData, startDate }) => {
                     <td>{startDate ? getMedian(fileData, startDate, SIXTEEN_TO_EIGHTEEN_MONTHS, calculateMedian) : ""}</td>
                     <td>{startDate ? getMedian(fileData, startDate, NINETEEN_TO_TWENTY_ONE_MONTHS, calculateMedian) : ""}</td>
                     <td>{startDate ? getMedian(fileData, startDate, TWENTY_TWO_TO_TWENTY_FOUR_MONTHS, calculateMedian) : ""}</td>
+                </tr>
+                <tr>
+                    <td>Median</td>
+                    <td>{startDate ? getMedian(fileData, startDate, ZERO_TO_THREE_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, FOUR_TO_SIX_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, SEVEN_TO_NINE_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, TEN_TO_TWELVE_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, THIRTEEN_TO_FIFTEEN_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, SIXTEEN_TO_EIGHTEEN_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, NINETEEN_TO_TWENTY_ONE_MONTHS, calculateMedian, false) : ""}</td>
+                    <td>{startDate ? getMedian(fileData, startDate, TWENTY_TWO_TO_TWENTY_FOUR_MONTHS, calculateMedian, false) : ""}</td>
                 </tr>
             </tbody>
         </Table>

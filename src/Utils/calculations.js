@@ -119,6 +119,28 @@ export function calculateAveragePricePerSquareFoot(MLSDataEntries, forDisplay) {
   return returnString;
 }
 
+export function calculateAverageSquareFeet(MLSDataEntries, forDisplay) {
+  //check for empty GLAs => Skip Empty?
+  let returnString = "";
+  let average = 0;
+  let sum = 0;
+
+  MLSDataEntries.forEach((entry) => {
+    sum += entry.GLA ? Number(entry.GLA) : 0;
+  });
+
+  average = sum / MLSDataEntries.length;
+
+  if (forDisplay) {
+    returnString = average.toLocaleString();
+    returnString = `${returnString} feet (${MLSDataEntries.length} entries)`;
+  } else {
+    returnString = average;
+  }
+
+  return returnString;
+}
+
 function getDate(startDate, mode, order) {
   let newDate = new Date(startDate);
 
@@ -176,22 +198,21 @@ export function getPercentageChange(
     false
   );
 
-  if (firstAverage > secondAverage) {
+  percentChange = (firstAverage - secondAverage) / firstAverage;
+
+  if (percentChange >= 0) {
     returnString += "+ ";
-    percentChange = secondAverage / firstAverage;
   } else {
     returnString += "- ";
-    percentChange = secondAverage / firstAverage;
   }
 
-  percentChange = 1 - percentChange;
   percentChange = percentChange * 100;
   returnString += `${percentChange.toFixed(3)}%`;
 
   return returnString;
 }
 
-export function calculateMedian(MLSDataEntries, forDisplay) {
+export function calculateMedian(MLSDataEntries, forSalesPrice, forDisplay) {
   let returnString = "";
   let median = 0;
 
@@ -207,7 +228,9 @@ export function calculateMedian(MLSDataEntries, forDisplay) {
 
   console.log(JSON.stringify(nums));
 
-  return `${returnString} (${MLSDataEntries.length})`;
+  return `${forSalesPrice ? "$" : ""}${returnString} (${
+    MLSDataEntries.length
+  })`;
 }
 
 export function getMedian(
@@ -215,6 +238,7 @@ export function getMedian(
   startDate,
   timeMode,
   calculateMedian,
+  forSalesPrice = true,
   forDisplay = true
 ) {
   let startCutoffDate = getDate(startDate, timeMode, START_DATE);
@@ -227,9 +251,9 @@ export function getMedian(
       entry.closingDate < startCutoffDate &&
       entry.status === STATUS_SOLD
     ) {
-      entriesArray.push(entry.salePrice);
+      entriesArray.push(forSalesPrice ? entry.salePrice : entry.GLA);
     }
   });
 
-  return calculateMedian(entriesArray, forDisplay);
+  return calculateMedian(entriesArray, forSalesPrice, forDisplay);
 }
