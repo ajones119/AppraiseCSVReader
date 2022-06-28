@@ -17,69 +17,7 @@ const percentChangeStyle = {
     color: "yellow"
 }
 
-export const DataTable = ({ fileData, startDate, title, dateConstant }) => {
-
-    const [tableColumns, setTableColumns] = useState([])
-
-
-    useEffect(() => {
-        if(fileData && startDate) {
-
-            const table = [];
-            const column = {}
-
-            dateConstant.forEach((interval) => {
-                column.averageSalesPrice = getAverage(fileData, startDate, interval.lowOffset, interval.highOffset, calculateAverageSalesPrice)
-                column.medianSalesPrice = getMedian(fileData, startDate, interval.lowOffset, interval.highOffset, "salePrice");
-                column.averagePricePerSquareFoot = getAverage(fileData, startDate, interval.lowOffset, interval.highOffset, calculateAveragePricePerSquareFoot);
-                column.averageSquareFeet = getAverage(fileData, startDate, interval.lowOffset, interval.highOffset, calculateAverageSquareFeet);
-                column.medianSquareFeet = getMedian(fileData, startDate, interval.lowOffset, interval.highOffset, "GLA");
-                column.averageYearBuilt = getAverage(fileData, startDate, interval.lowOffset, interval.highOffset, calculateAverageYearBuilt);
-                column.medianYearBuilt = getMedian(fileData, startDate, interval.lowOffset, interval.highOffset, "yearBuilt");
-
-                let SalePriceModeObject = getMode(fileData, startDate, interval.lowOffset, interval.highOffset, "salePrice");
-                column.maxSalePrice = Number(SalePriceModeObject.max);
-                column.minSalePrice = Number(SalePriceModeObject.min);
-                column.modeSalePrice = Number(SalePriceModeObject.mode);
-
-                let SquareFeetModeObject = getMode(fileData, startDate, interval.lowOffset, interval.highOffset, "GLA");
-                column.maxSquareFeet = Number(SquareFeetModeObject.max);
-                column.minSquareFeet = Number(SquareFeetModeObject.min);
-                column.modeSquareFeet = Number(SquareFeetModeObject.mode);
-
-                let YearBuiltModeObject = getMode(fileData, startDate, interval.lowOffset, interval.highOffset, "yearBuilt");
-                column.maxYearBuilt = Number(YearBuiltModeObject.max);
-                column.minYearBuilt = Number(YearBuiltModeObject.min);
-                column.modeYearBuilt = Number(YearBuiltModeObject.mode);
-
-                table.push({...column});
-            });
-
-            for (let i = 0; i < dateConstant.length; i++) {
-                if(i < Math.floor(table.length/2)) {
-                const columnOne = table[i];
-                const columnTwo = table[Math.ceil(table.length/2) + i];
-                table[i].percentChangeAverageSalesPrice =  getPercentageChange(Number(columnOne.averageSalesPrice), Number(columnTwo.averageSalesPrice));
-                table[i].percentChangeMedianSalesPrice = getPercentageChange(Number(columnOne.medianSalesPrice), Number(columnTwo.medianSalesPrice));
-                table[i].percentChangeAveragePricePerSquareFoot = getPercentageChange(Number(columnOne.averagePricePerSquareFoot), Number(columnTwo.averagePricePerSquareFoot));
-                table[i].percentChangeAverageSquareFeet = getPercentageChange(Number(columnOne.averageSquareFeet), Number(columnTwo.averageSquareFeet));
-                table[i].percentChangeMedianSquareFeet = getPercentageChange(Number(columnOne.medianSquareFeet), Number(columnTwo.medianSquareFeet));
-
-                } else {
-                    table[i].percentChangeAverageSalesPrice = "-";
-                    table[i].percentChangeMedianSalesPrice = "-";
-                    table[i].percentChangeAveragePricePerSquareFoot = "-";
-                    table[i].percentChangeAverageSquareFeet = "-";
-                    table[i].percentChangeMedianSquareFeet = "-";
-                }
-            }
-            //console.log(table);
-            setTableColumns([...table]);
-        } else {
-            setTableColumns([]);
-        }
-    }, [fileData, startDate, dateConstant]);
-
+export const DataTable = ({ title, dateConstant, tableColumns }) => {
 
   return (
     <Row>

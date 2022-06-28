@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import DatePicker from "react-date-picker";
+import Switch from "react-switch";
+import { YEARLY, QUARTERLY } from "../Utils/constants";
 import { DataDisplay } from "./DataDisplay";
 import { FileDownloader } from "./FileDownloader";
 import { FileUploader } from "./FileUploader";
@@ -10,13 +12,11 @@ const rowStyle = {
     paddingTop: '25px'
 }
 
-const color = {
-    color: 'white'
-}
 
 export const PageView = () => {
     const [csvData, setCSVData] = useState();
     const [startDate, setStartDate] = useState(new Date());
+    const [isYearly, setIsYearly] = useState(true);
 
     return (
         <Container style={rowStyle}>
@@ -24,13 +24,19 @@ export const PageView = () => {
                 <FileUploader setCSVData={setCSVData} />
             </Row>
             <Row>
-                <div style={{color: "white"}}>
-                <DatePicker onChange={(date) => setStartDate(date)} value={startDate}/>
-                </div>
+                <Col>
+                    <DatePicker onChange={(date) => setStartDate(date)} value={startDate}/>
+                </Col>
+                <Col>
+                    Quarterly <Switch onChange={() => setIsYearly(!isYearly)} checked={isYearly} uncheckedIcon={false} checkedIcon={false} /> Yearly
+                </Col>
             </Row>
             <Row>
                 {
-                    (startDate && csvData) ? <DataDisplay fileData={csvData} startDate={startDate} /> : ""
+                    (startDate && csvData && isYearly) ? <DataDisplay fileData={csvData} startDate={startDate} title="Yearly" dateConstant={YEARLY} /> : ""
+                }
+                {
+                    (startDate && csvData && !isYearly) ? <DataDisplay fileData={csvData} startDate={startDate} title="Quarterly" dateConstant={QUARTERLY} /> : ""
                 }
             </Row>
         </Container>

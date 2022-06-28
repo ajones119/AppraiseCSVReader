@@ -5,7 +5,7 @@ export const STATUS_SOLD = "Sold";
 export const START_DATE = 0;
 export const END_DATE = 1;
 
-export const BIYEARLY = [
+export const YEARLY = [
   { columnName: "1-12", lowOffset: 0, highOffset: 12 },
   { columnName: "13-24", lowOffset: 12, highOffset: 24 },
   { columnName: "1-24", lowOffset: 0, highOffset: 24 },
