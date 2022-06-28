@@ -6,7 +6,8 @@ import { FileDownloader } from "./FileDownloader";
 import { FileUploader } from "./FileUploader";
 
 const rowStyle = {
-    margin: 'auto'
+    margin: 'auto',
+    paddingTop: '25px'
 }
 
 const color = {
@@ -23,10 +24,14 @@ export const PageView = () => {
                 <FileUploader setCSVData={setCSVData} />
             </Row>
             <Row>
+                <div style={{color: "white"}}>
                 <DatePicker onChange={(date) => setStartDate(date)} value={startDate}/>
+                </div>
             </Row>
             <Row>
-                <DataDisplay fileData={csvData} startDate={startDate} />
+                {
+                    (startDate && csvData) ? <DataDisplay fileData={csvData} startDate={startDate} /> : ""
+                }
             </Row>
         </Container>
     );

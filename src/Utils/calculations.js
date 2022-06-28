@@ -1,78 +1,22 @@
-import { format } from "date-fns";
-import {
-  END_DATE,
-  FOUR_TO_SIX_MONTHS,
-  NINETEEN_TO_TWENTY_ONE_MONTHS,
-  SEVEN_TO_NINE_MONTHS,
-  SIXTEEN_TO_EIGHTEEN_MONTHS,
-  START_DATE,
-  STATUS_SOLD,
-  TEN_TO_TWELVE_MONTHS,
-  THIRTEEN_TO_FIFTEEN_MONTHS,
-  THIRTEEN_TO_TWENTY_FOUR_MONTHS,
-  TWENTY_TWO_TO_TWENTY_FOUR_MONTHS,
-  ZERO_TO_THREE_MONTHS,
-  ZERO_TO_TWELVE_MONTHS,
-  ZERO_TO_TWENTY_FOUR_MONTHS,
-} from "./constants";
+import { STATUS_SOLD } from "./constants";
 
-function getMonthOffset(mode, order) {
-  let offset = 0;
+export function calculateAverage(MLSDataEntries) {
+  let returnString = "";
+  let average = 0;
+  let sum = 0;
 
-  if (order === START_DATE) {
-    if (mode === ZERO_TO_TWELVE_MONTHS) {
-      offset = 0;
-    } else if (mode === THIRTEEN_TO_TWENTY_FOUR_MONTHS) {
-      offset = 12;
-    } else if (mode === ZERO_TO_TWENTY_FOUR_MONTHS) {
-      offset = 0;
-    } else if (mode === ZERO_TO_THREE_MONTHS) {
-      offset = 0;
-    } else if (mode === FOUR_TO_SIX_MONTHS) {
-      offset = 3;
-    } else if (mode === SEVEN_TO_NINE_MONTHS) {
-      offset = 6;
-    } else if (mode === TEN_TO_TWELVE_MONTHS) {
-      offset = 9;
-    } else if (mode === THIRTEEN_TO_FIFTEEN_MONTHS) {
-      offset = 12;
-    } else if (mode === SIXTEEN_TO_EIGHTEEN_MONTHS) {
-      offset = 15;
-    } else if (mode === NINETEEN_TO_TWENTY_ONE_MONTHS) {
-      offset = 18;
-    } else if (mode === TWENTY_TWO_TO_TWENTY_FOUR_MONTHS) {
-      offset = 21;
-    }
-  } else {
-    if (mode === ZERO_TO_TWELVE_MONTHS) {
-      offset = 12;
-    } else if (mode === THIRTEEN_TO_TWENTY_FOUR_MONTHS) {
-      offset = 24;
-    } else if (mode === ZERO_TO_TWENTY_FOUR_MONTHS) {
-      offset = 24;
-    } else if (mode === ZERO_TO_THREE_MONTHS) {
-      offset = 3;
-    } else if (mode === FOUR_TO_SIX_MONTHS) {
-      offset = 6;
-    } else if (mode === SEVEN_TO_NINE_MONTHS) {
-      offset = 9;
-    } else if (mode === TEN_TO_TWELVE_MONTHS) {
-      offset = 12;
-    } else if (mode === THIRTEEN_TO_FIFTEEN_MONTHS) {
-      offset = 15;
-    } else if (mode === SIXTEEN_TO_EIGHTEEN_MONTHS) {
-      offset = 18;
-    } else if (mode === NINETEEN_TO_TWENTY_ONE_MONTHS) {
-      offset = 21;
-    } else if (mode === TWENTY_TWO_TO_TWENTY_FOUR_MONTHS) {
-      offset = 24;
-    }
-  }
+  MLSDataEntries.forEach((entry) => {
+    sum += entry ? Number(entry) : 0;
+  });
 
-  return offset;
+  average = sum / MLSDataEntries.length;
+
+  returnString = average;
+
+  return returnString;
 }
 
-export function calculateAverageSalesPrice(MLSDataEntries, forDisplay) {
+export function calculateAverageSalesPrice(MLSDataEntries) {
   let returnString = "";
   let average = 0;
   let sum = 0;
@@ -83,17 +27,28 @@ export function calculateAverageSalesPrice(MLSDataEntries, forDisplay) {
 
   average = sum / MLSDataEntries.length;
 
-  if (forDisplay) {
-    returnString = average.toLocaleString();
-    returnString = `$${returnString} (${MLSDataEntries.length} entries)`;
-  } else {
-    returnString = average;
-  }
+  returnString = average;
 
   return returnString;
 }
 
-export function calculateAveragePricePerSquareFoot(MLSDataEntries, forDisplay) {
+export function calculateAverageYearBuilt(MLSDataEntries) {
+  let returnString = "";
+  let average = 0;
+  let sum = 0;
+
+  MLSDataEntries.forEach((entry) => {
+    sum += entry.yearBuilt ? Number(entry.yearBuilt) : 0;
+  });
+
+  average = sum / MLSDataEntries.length;
+
+  returnString = average;
+
+  return returnString;
+}
+
+export function calculateAveragePricePerSquareFoot(MLSDataEntries) {
   let returnString = "";
   let average = 0;
   let sum = 0;
@@ -109,17 +64,12 @@ export function calculateAveragePricePerSquareFoot(MLSDataEntries, forDisplay) {
 
   average = sum / pricePerSquareFootArray.length;
 
-  if (forDisplay) {
-    returnString = average.toLocaleString();
-    returnString = `$${returnString} (${pricePerSquareFootArray.length} entries)`;
-  } else {
-    returnString = average;
-  }
+  returnString = average;
 
   return returnString;
 }
 
-export function calculateAverageSquareFeet(MLSDataEntries, forDisplay) {
+export function calculateAverageSquareFeet(MLSDataEntries) {
   //check for empty GLAs => Skip Empty?
   let returnString = "";
   let average = 0;
@@ -131,20 +81,15 @@ export function calculateAverageSquareFeet(MLSDataEntries, forDisplay) {
 
   average = sum / MLSDataEntries.length;
 
-  if (forDisplay) {
-    returnString = average.toLocaleString();
-    returnString = `${returnString} feet (${MLSDataEntries.length} entries)`;
-  } else {
-    returnString = average;
-  }
+  returnString = average;
 
   return returnString;
 }
 
-function getDate(startDate, mode, order) {
+function getDate(startDate, offset) {
   let newDate = new Date(startDate);
 
-  newDate.setMonth(newDate.getMonth() - getMonthOffset(mode, order));
+  newDate.setMonth(newDate.getMonth() - offset);
 
   return newDate;
 }
@@ -152,12 +97,12 @@ function getDate(startDate, mode, order) {
 export function getAverage(
   MLSDataEntries = [],
   startDate,
-  timeMode,
-  calculateAverage,
-  forDisplay = true
+  lowOffset,
+  highOffset,
+  calculateAverage
 ) {
-  let startCutoffDate = getDate(startDate, timeMode, START_DATE);
-  let endCutoffDate = getDate(startDate, timeMode, END_DATE);
+  let startCutoffDate = getDate(startDate, lowOffset);
+  let endCutoffDate = getDate(startDate, highOffset);
 
   let entriesArray = [];
   MLSDataEntries.forEach((entry) => {
@@ -170,40 +115,17 @@ export function getAverage(
     }
   });
 
-  return calculateAverage(entriesArray, forDisplay);
+  return calculateAverage(entriesArray);
 }
 
-export function getPercentageChange(
-  firstTimePeriod,
-  secondTimePeriod,
-  startDate,
-  MLSDataEntries,
-  calculateAverage
-) {
+export function getPercentageChange(firstNumber, secondNumber) {
   let percentChange = 0;
   let returnString = "";
 
-  const firstAverage = getAverage(
-    MLSDataEntries,
-    startDate,
-    firstTimePeriod,
-    calculateAverage,
-    false
-  );
-  const secondAverage = getAverage(
-    MLSDataEntries,
-    startDate,
-    secondTimePeriod,
-    calculateAverage,
-    false
-  );
-
-  percentChange = (firstAverage - secondAverage) / firstAverage;
+  percentChange = (firstNumber - secondNumber) / firstNumber;
 
   if (percentChange >= 0) {
     returnString += "+ ";
-  } else {
-    returnString += "- ";
   }
 
   percentChange = percentChange * 100;
@@ -212,7 +134,7 @@ export function getPercentageChange(
   return returnString;
 }
 
-export function calculateMedian(MLSDataEntries, forSalesPrice, forDisplay) {
+export function calculateMedian(MLSDataEntries) {
   let returnString = "";
   let median = 0;
 
@@ -224,25 +146,55 @@ export function calculateMedian(MLSDataEntries, forSalesPrice, forDisplay) {
       ? Number(nums[middle])
       : (Number(nums[middle - 1]) + Number(nums[middle])) / 2;
 
-  returnString = median.toLocaleString();
+  returnString = median;
 
-  console.log(JSON.stringify(nums));
+  return returnString;
+}
 
-  return `${forSalesPrice ? "$" : ""}${returnString} (${
-    MLSDataEntries.length
-  })`;
+export function calculateMode(MLSDataEntries) {
+  let returnObject = {};
+  let counts = {};
+
+  const sortedArray = [...MLSDataEntries].sort((a, b) => a - b);
+  returnObject.min = sortedArray[0];
+  returnObject.max = sortedArray[sortedArray.length - 1];
+
+  for (let i = 0; i < sortedArray.length; i++) {
+    counts[sortedArray[i]] = (counts[sortedArray[i]] || 0) + 1;
+  }
+
+  let max = 0;
+  let values = [];
+  for (let key in counts) {
+    if (counts.hasOwnProperty(key)) {
+      if (counts[key] > max) {
+        max = counts[key];
+        values = [key];
+      } else if (counts[key] === max) {
+        max = counts[key];
+        values.push(key);
+      }
+    }
+  }
+
+  if (values.length > 1) {
+    returnObject.mode = calculateAverage(values);
+  } else {
+    returnObject.mode = values[0];
+  }
+
+  return returnObject;
 }
 
 export function getMedian(
   MLSDataEntries = [],
   startDate,
-  timeMode,
-  calculateMedian,
-  forSalesPrice = true,
-  forDisplay = true
+  lowOffset,
+  highOffset,
+  medianKey
 ) {
-  let startCutoffDate = getDate(startDate, timeMode, START_DATE);
-  let endCutoffDate = getDate(startDate, timeMode, END_DATE);
+  let startCutoffDate = getDate(startDate, lowOffset);
+  let endCutoffDate = getDate(startDate, highOffset);
 
   let entriesArray = [];
   MLSDataEntries.forEach((entry) => {
@@ -251,9 +203,33 @@ export function getMedian(
       entry.closingDate < startCutoffDate &&
       entry.status === STATUS_SOLD
     ) {
-      entriesArray.push(forSalesPrice ? entry.salePrice : entry.GLA);
+      entriesArray.push(entry[medianKey]);
     }
   });
 
-  return calculateMedian(entriesArray, forSalesPrice, forDisplay);
+  return calculateMedian(entriesArray);
+}
+
+export function getMode(
+  MLSDataEntries = [],
+  startDate,
+  lowOffset,
+  highOffset,
+  medianKey
+) {
+  let startCutoffDate = getDate(startDate, lowOffset);
+  let endCutoffDate = getDate(startDate, highOffset);
+
+  let entriesArray = [];
+  MLSDataEntries.forEach((entry) => {
+    if (
+      entry.closingDate > endCutoffDate &&
+      entry.closingDate < startCutoffDate &&
+      entry.status === STATUS_SOLD
+    ) {
+      entriesArray.push(entry[medianKey]);
+    }
+  });
+
+  return calculateMode(entriesArray);
 }
