@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateAverageSquareFeet, calculateAverageYearBuilt, getAverage, getMedian, getMode, getPercentageChange } from '../Utils/calculations';
+import { calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateAverageSquareFeet, calculateAverageYearBuilt, getAverage, getMedian, getMode, getNumberOfEntries, getPercentageChange } from '../Utils/calculations';
 import { DataChart } from './DataChart';
 import { DataTable } from './DataTable';
 
@@ -23,6 +23,7 @@ const [tableColumns, setTableColumns] = useState([])
                 column.medianSquareFeet = getMedian(fileData, startDate, interval.lowOffset, interval.highOffset, "GLA");
                 column.averageYearBuilt = getAverage(fileData, startDate, interval.lowOffset, interval.highOffset, calculateAverageYearBuilt);
                 column.medianYearBuilt = getMedian(fileData, startDate, interval.lowOffset, interval.highOffset, "yearBuilt");
+                column.numOfEntries = getNumberOfEntries(fileData, startDate, interval.lowOffset, interval.highOffset);
 
                 let SalePriceModeObject = getMode(fileData, startDate, interval.lowOffset, interval.highOffset, "salePrice");
                 column.maxSalePrice = Number(SalePriceModeObject.max);

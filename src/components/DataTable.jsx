@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Table } from 'react-bootstrap';
 import { calculateAverage, calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateAverageSquareFeet, calculateAverageYearBuilt, calculateMedianSalesPrice, getAverage, getMedian, getMode, getPercentageChange } from '../Utils/calculations';
+import { DataTableRow } from './DataTableRows/DataTableRow';
 import { DataTableRowDollars } from './DataTableRows/DataTableRowDollars';
 import { DataTableRowFeet } from './DataTableRows/DataTableRowFeet';
 import { DataTableRowModeDollars } from './DataTableRows/DataTableRowModeDollars';
@@ -45,6 +46,7 @@ export const DataTable = ({ title, dateConstant, tableColumns }) => {
                 <DataTableRowYears tableColumns={tableColumns} title="Average Year Built" colKey="averageYearBuilt" />
                 <DataTableRowYears tableColumns={tableColumns} title="Median Year Built" colKey="medianYearBuilt" />
                 <DataTableRowModeYears tableColumns={tableColumns} title="Year Built Mode (min/max)" modeColKey="modeYearBuilt" minColKey="minYearBuilt" maxColKey="maxYearBuilt"/>
+                <DataTableRow tableColumns={tableColumns} title="Number of Entries" colKey="numOfEntries" />
             </tbody>
         </Table>
     </Row>

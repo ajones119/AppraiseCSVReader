@@ -94,6 +94,29 @@ function getDate(startDate, offset) {
   return newDate;
 }
 
+export function getNumberOfEntries(
+  MLSDataEntries = [],
+  startDate,
+  lowOffset,
+  highOffset
+) {
+  let startCutoffDate = getDate(startDate, lowOffset);
+  let endCutoffDate = getDate(startDate, highOffset);
+
+  let entriesArray = [];
+  MLSDataEntries.forEach((entry) => {
+    if (
+      entry.closingDate > endCutoffDate &&
+      entry.closingDate < startCutoffDate &&
+      entry.status === STATUS_SOLD
+    ) {
+      entriesArray.push(entry);
+    }
+  });
+
+  return entriesArray.length;
+}
+
 export function getAverage(
   MLSDataEntries = [],
   startDate,
