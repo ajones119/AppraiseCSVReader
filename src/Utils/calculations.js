@@ -145,7 +145,7 @@ export function getPercentageChange(firstNumber, secondNumber) {
   let percentChange = 0;
   let returnString = "";
 
-  percentChange = (firstNumber - secondNumber) / firstNumber;
+  percentChange = (firstNumber - secondNumber) / secondNumber;
 
   if (percentChange >= 0) {
     returnString += "+ ";
