@@ -46,7 +46,7 @@ const [tableColumns, setTableColumns] = useState([])
             for (let i = 0; i < dateConstant.length; i++) {
                 if(i < Math.floor(table.length/2)) {
                 const columnOne = table[i];
-                const columnTwo = table[Math.ceil(table.length/2) + i];
+                const columnTwo = table[Math.floor(table.length/2) + i];
                 table[i].percentChangeAverageSalesPrice =  getPercentageChange(Number(columnOne.averageSalesPrice), Number(columnTwo.averageSalesPrice));
                 table[i].percentChangeMedianSalesPrice = getPercentageChange(Number(columnOne.medianSalesPrice), Number(columnTwo.medianSalesPrice));
                 table[i].percentChangeAveragePricePerSquareFoot = getPercentageChange(Number(columnOne.averagePricePerSquareFoot), Number(columnTwo.averagePricePerSquareFoot));

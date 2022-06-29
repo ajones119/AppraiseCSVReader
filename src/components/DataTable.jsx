@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Row, Table } from 'react-bootstrap';
-import { calculateAverage, calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateAverageSquareFeet, calculateAverageYearBuilt, calculateMedianSalesPrice, getAverage, getMedian, getMode, getPercentageChange } from '../Utils/calculations';
+import React from 'react';
+import { Row, Table } from 'react-bootstrap';
 import { DataTableRow } from './DataTableRows/DataTableRow';
 import { DataTableRowDollars } from './DataTableRows/DataTableRowDollars';
 import { DataTableRowFeet } from './DataTableRows/DataTableRowFeet';
