@@ -36,7 +36,7 @@ export const PageView = () => {
                     (startDate && csvData && isYearly) ? <DataDisplay fileData={csvData} startDate={startDate} title="Yearly" dateConstant={YEARLY} /> : ""
                 }
                 {
-                    (startDate && csvData && !isYearly) ? <DataDisplay fileData={csvData} startDate={startDate} title="Quarterly" dateConstant={QUARTERLY} /> : ""
+                    (startDate && csvData && !isYearly) ? <DataDisplay fileData={csvData} startDate={startDate} title="Quarterly" dateConstant={QUARTERLY} isQuarterly /> : ""
                 }
             </Row>
         </Container>

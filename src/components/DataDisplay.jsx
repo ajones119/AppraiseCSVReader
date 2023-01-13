@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { calculateAveragePricePerSquareFoot, calculateAverageSalesPrice, calculateAverageSquareFeet, calculateAverageYearBuilt, getAverage, getMedian, getMode, getNumberOfEntries, getPercentageChange } from '../Utils/calculations';
+import { getQuarterlyPercentageChangeRows, getYearlyPercentageChangeRows } from '../Utils/DataTableHelpers';
 import { DataChart } from './DataChart';
 import { DataTable } from './DataTable';
 
 
-export const DataDisplay = ({ fileData, startDate, dateConstant, title }) => {
+export const DataDisplay = ({ fileData, startDate, dateConstant, title, isQuarterly }) => {
 const [tableColumns, setTableColumns] = useState([])
 
 
@@ -43,24 +44,13 @@ const [tableColumns, setTableColumns] = useState([])
                 table.push({...column});
             });
 
-            for (let i = 0; i < dateConstant.length; i++) {
-                if(i > 0) {
-                const columnOne = table[i];
-                const columnTwo = table[i - 1];
-                table[i].percentChangeAverageSalesPrice =  getPercentageChange(Number(columnOne.averageSalesPrice), Number(columnTwo.averageSalesPrice));
-                table[i].percentChangeMedianSalesPrice = getPercentageChange(Number(columnOne.medianSalesPrice), Number(columnTwo.medianSalesPrice));
-                table[i].percentChangeAveragePricePerSquareFoot = getPercentageChange(Number(columnOne.averagePricePerSquareFoot), Number(columnTwo.averagePricePerSquareFoot));
-                table[i].percentChangeAverageSquareFeet = getPercentageChange(Number(columnOne.averageSquareFeet), Number(columnTwo.averageSquareFeet));
-                table[i].percentChangeMedianSquareFeet = getPercentageChange(Number(columnOne.medianSquareFeet), Number(columnTwo.medianSquareFeet));
-
-                } else {
-                    table[i].percentChangeAverageSalesPrice = "-";
-                    table[i].percentChangeMedianSalesPrice = "-";
-                    table[i].percentChangeAveragePricePerSquareFoot = "-";
-                    table[i].percentChangeAverageSquareFeet = "-";
-                    table[i].percentChangeMedianSquareFeet = "-";
-                }
+            if (isQuarterly) {
+                getQuarterlyPercentageChangeRows(table, dateConstant.length)
+            } else {
+                getYearlyPercentageChangeRows(table, dateConstant.length)
             }
+
+
             setTableColumns([...table]);
         } else {
             setTableColumns([]);
