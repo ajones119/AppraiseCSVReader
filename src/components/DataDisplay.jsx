@@ -44,9 +44,9 @@ const [tableColumns, setTableColumns] = useState([])
             });
 
             for (let i = 0; i < dateConstant.length; i++) {
-                if(i < Math.floor(table.length/2)) {
+                if(i > 0) {
                 const columnOne = table[i];
-                const columnTwo = table[Math.floor(table.length/2) + i];
+                const columnTwo = table[i - 1];
                 table[i].percentChangeAverageSalesPrice =  getPercentageChange(Number(columnOne.averageSalesPrice), Number(columnTwo.averageSalesPrice));
                 table[i].percentChangeMedianSalesPrice = getPercentageChange(Number(columnOne.medianSalesPrice), Number(columnTwo.medianSalesPrice));
                 table[i].percentChangeAveragePricePerSquareFoot = getPercentageChange(Number(columnOne.averagePricePerSquareFoot), Number(columnTwo.averagePricePerSquareFoot));
@@ -61,7 +61,6 @@ const [tableColumns, setTableColumns] = useState([])
                     table[i].percentChangeMedianSquareFeet = "-";
                 }
             }
-            //console.log(table);
             setTableColumns([...table]);
         } else {
             setTableColumns([]);

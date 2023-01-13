@@ -9,14 +9,6 @@ import { DataTableRowModeYears } from './DataTableRows/DataTableRowModeYears';
 import { DataTableRowPercentChange } from './DataTableRows/DataTableRowPercentChange';
 import { DataTableRowYears } from './DataTableRows/DataTableRowYears';
 
-const titleStyle = {
-    color: "white"
-}
-
-const percentChangeStyle = {
-    color: "yellow"
-}
-
 export const DataTable = ({ title, dateConstant, tableColumns }) => {
 
   return (

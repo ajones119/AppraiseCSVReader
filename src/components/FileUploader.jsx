@@ -36,8 +36,6 @@ export const FileUploader = ({ setCSVData }) => {
         <>
             <CSVReader
                 onUploadAccepted={(results) => {
-                    console.log('---------------------------');
-                    console.log(results);
                     const dataArray = [];
                     results.data.forEach(result => dataArray.push(new MLSDataEntry(
                         result[0], result[1], result[2], result[3], result[4], result[5], result[6],
@@ -46,7 +44,6 @@ export const FileUploader = ({ setCSVData }) => {
                         result[21], result[22]
                     )))
                     setCSVData(dataArray);
-                    console.log('---------------------------');
                 }}
             >
                 {({
